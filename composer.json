@@ -1,0 +1,27 @@
+{
+    "name": "oophp/email",
+    "description": "Object Oriented Email message handling",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yehuda Deutsch",
+            "email": "yeh@uda.co.il"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "OOPHP\\Email\\": "src/",
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.0.0",
+        "oophp/mailparse": "0.1.x-dev",
+        "oophp/charset": "^0.1.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    }
+}
