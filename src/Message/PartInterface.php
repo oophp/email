@@ -2,7 +2,7 @@
 
 namespace OOPHP\Email\Message;
 
-use OOPHP\Email\HeaderInterface;
+use OOPHP\Email\HeaderFieldInterface;
 
 interface PartInterface
 {
@@ -14,7 +14,7 @@ interface PartInterface
     /**
      * @param string $name
      *
-     * @return HeaderInterface
+     * @return HeaderFieldInterface
      */
     public function getHeader(string $name);
 

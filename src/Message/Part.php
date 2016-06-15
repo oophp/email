@@ -4,6 +4,8 @@ namespace OOPHP\Email\Message;
 
 use OOPHP\Charset\Charset;
 use OOPHP\Charset\CharsetInterface;
+use OOPHP\Email\HeaderFieldList;
+use OOPHP\Email\HeaderFieldListInterface;
 use OOPHP\Mailparse\Mailparse;
 
 class Part implements PartInterface
@@ -24,9 +26,9 @@ class Part implements PartInterface
     protected $charset;
 
     /**
-     * @var array $headers
+     * @var HeaderFieldListInterface $headers
      */
-    protected $headers = [];
+    protected $headers;
 
     /**
      * @var Part[] $parts
@@ -36,8 +38,8 @@ class Part implements PartInterface
     /**
      * Part constructor.
      *
-     * @param CharsetInterface|null $charset
-     * @param Mailparse|null        $mailparse
+     * @param CharsetInterface $charset
+     * @param Mailparse        $mailparse
      */
     public function __construct(CharsetInterface $charset = null, Mailparse $mailparse = null)
     {
@@ -50,32 +52,54 @@ class Part implements PartInterface
         if ($mailparse !== null) {
             $this->mailparse = $mailparse;
             $this->data = $mailparse->getPartData();
+            $this->headers = new HeaderFieldList($this->data['headers'] ?? []);
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getHeaders()
     {
-        return $this->getData()['headers'] ?? [];
-    }
-
-    public function getHeader(string $name, $default = null)
-    {
-        return $this->getHeaders()[strtolower($name)] ?? $default;
-    }
-
-    public function isMultipart()
-    {
-        // TODO: Implement isMultipart() method.
-    }
-
-    public function getParts()
-    {
-        // TODO: Implement getParts() method.
+        return $this->headers;
     }
 
     /**
-     * @param string                $partId
-     * @param CharsetInterface|null $charset
+     * {@inheritdoc}
+     */
+    public function getHeader(string $name, $default = null)
+    {
+        return $this->headers->getField(strtolower($name), $default);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isMultipart()
+    {
+        static $isMultipart;
+        if (!isset($isMultipart)) {
+            $isMultipart = false;
+        }
+        // TODO: Implement isMultipart() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParts()
+    {
+        $structure = $this->mailparse->getStructure();
+        foreach ($structure as $partId) {
+            $this->getPart($partId);
+        }
+
+        return $this->parts;
+    }
+
+    /**
+     * @param string           $partId
+     * @param CharsetInterface $charset
      *
      * @return Part|bool
      */
@@ -92,6 +116,9 @@ class Part implements PartInterface
         return $this->parts[$partId] ?? false;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->mailparse->getText();
@@ -101,7 +128,7 @@ class Part implements PartInterface
     {
         if (empty($this->data) && $this->mailparse instanceof Mailparse) {
             $this->data = $this->mailparse->getPartData();
-            $this->headers = $this->data['headers'] ?? [];
+            $this->headers = new HeaderFieldList($this->data['headers'] ?? []);
         }
 
         return $this->data;

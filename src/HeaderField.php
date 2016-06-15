@@ -1,0 +1,115 @@
+<?php
+
+namespace OOPHP\Email;
+
+class HeaderField implements HeaderFieldInterface
+{
+    /**
+     * @var string $name
+     */
+    protected $name;
+
+    /**
+     * @var string[] $headerLines
+     */
+    protected $headerLines = [];
+
+    public function __construct($name, $value)
+    {
+        $this->name = $name;
+        $this->setValue($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue($default = null)
+    {
+        if (empty($this->headerLines)) {
+            return (new static($this->name, $default))->getValue();
+        }
+
+        if ($this->hasMultipleValues()) {
+            return $this->headerLines;
+        } else {
+            return reset($this->headerLines);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue($values)
+    {
+        $this->headerLines = [];
+        foreach ((array)$values as $value) {
+            $this->addValue($value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addValue($value)
+    {
+        if (empty($value)) {
+            throw new \Exception('Header value can\'t be empty.');
+        }
+
+        $this->headerLines[] = (string)$value;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMultipleValues()
+    {
+        return $this->count() > 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->headerLines);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->headerLines);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return $this->headerLines;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        $str = implode("\r\n", array_map('strval', $this->headerLines));
+
+        return $str;
+    }
+}
