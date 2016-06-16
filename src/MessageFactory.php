@@ -26,10 +26,7 @@ class MessageFactory implements MessageFactoryInterface
     protected $messageClass;
 
     /**
-     * Parser constructor.
-     *
-     * @param CharsetInterface $charset
-     * @param string           $messageClass
+     * {@inheritdoc}
      */
     public function __construct(CharsetInterface $charset = null, string $messageClass = Message::class)
     {
@@ -41,52 +38,43 @@ class MessageFactory implements MessageFactoryInterface
     }
 
     /**
-     * @param string $path
-     *
-     * @return MessageInterface
+     * {@inheritdoc}
      */
-    public function fromPath(string $path): MessageInterface
+    public function fromPath(string $path, string $mailparseClass = Mailparse::class): MessageInterface
     {
-        $mailparse = (new Mailparse())->setPath($path);
+        $mailparse = (new $mailparseClass())->setPath($path);
 
         return $this->createMessage($mailparse);
     }
 
     /**
-     * @param resource $stream
-     *
-     * @return MessageInterface
+     * {@inheritdoc}
      * @throws \OOPHP\Mailparse\Exception\NonReadableStream
      */
-    public function fromStream($stream): MessageInterface
+    public function fromStream($stream, string $mailparseClass = Mailparse::class): MessageInterface
     {
-        $mailparse = (new Mailparse())->setStream($stream);
+        $mailparse = (new $mailparseClass())->setStream($stream);
 
         return $this->createMessage($mailparse);
     }
 
     /**
-     * @param string $text
-     *
-     * @return MessageInterface
+     * {@inheritdoc}
      */
-    public function fromText(string $text): MessageInterface
+    public function fromText(string $text, string $mailparseClass = Mailparse::class): MessageInterface
     {
-        $mailparse = (new Mailparse())->setText($text);
+        $mailparse = (new $mailparseClass())->setText($text);
 
         return $this->createMessage($mailparse);
     }
 
     /**
-     * @param $mailparse
+     * @param Mailparse $mailparse
      *
      * @return MessageInterface
      */
-    protected function createMessage($mailparse): MessageInterface
+    protected function createMessage(Mailparse $mailparse): MessageInterface
     {
-        $messageClass = $this->messageClass;
-        $message = new $messageClass($this->charset, $mailparse);
-
-        return $message;
+        return new $this->messageClass($this->charset, $mailparse);
     }
 }
