@@ -16,6 +16,11 @@ class Part implements PartInterface
     protected $mailparse;
 
     /**
+     * @var string $partClass
+     */
+    protected $partClass = Part::class;
+
+    /**
      * @var array
      */
     protected $data = [];
@@ -87,6 +92,16 @@ class Part implements PartInterface
     /**
      * {@inheritdoc}
      */
+    public function setPartClass(string $partClass)
+    {
+        $this->partClass = $partClass;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getParts()
     {
         $structure = $this->mailparse->getStructure();
@@ -101,7 +116,7 @@ class Part implements PartInterface
      * @param string           $partId
      * @param CharsetInterface $charset
      *
-     * @return Part|bool
+     * @return PartInterface|bool
      */
     public function getPart(string $partId, CharsetInterface $charset = null)
     {
@@ -110,7 +125,7 @@ class Part implements PartInterface
                 $charset = $this->charset;
             }
             $part = $this->mailparse->getPartObject($partId);
-            $this->parts[$partId] = new Part($charset, $part);
+            $this->parts[$partId] = new $this->partClass($charset, $part);
         }
 
         return $this->parts[$partId] ?? false;

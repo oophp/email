@@ -24,6 +24,15 @@ interface PartInterface
     public function isMultipart();
 
     /**
+     * Using this provides support for using a class implementing PartInterface
+     *
+     * @param string $partClass
+     *
+     * @return PartInterface
+     */
+    public function setPartClass(string $partClass);
+
+    /**
      * @return PartInterface[]
      */
     public function getParts();
