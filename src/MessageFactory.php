@@ -49,7 +49,7 @@ class MessageFactory implements MessageFactoryInterface
 
     /**
      * {@inheritdoc}
-     * @throws \OOPHP\Mailparse\Exception\NonReadableStream
+     * @throws \OOPHP\Mailparse\Exception\NonReadableStreamException
      */
     public function fromStream($stream, string $mailparseClass = Mailparse::class): MessageInterface
     {
