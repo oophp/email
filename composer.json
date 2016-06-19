@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">=7.0.0",
-        "oophp/mailparse": "0.1.x-dev",
+        "oophp/mailparse": "^0.1.0",
         "oophp/charset": "^0.1.0"
     },
     "extra": {
