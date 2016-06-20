@@ -19,6 +19,9 @@
         "oophp/mailparse": "^0.1.0",
         "oophp/charset": "^0.1.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^5.4.0"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "0.1-dev"
