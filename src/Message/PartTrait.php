@@ -18,7 +18,7 @@ trait PartTrait
     /**
      * @var string $partClass
      */
-    protected $partClass = Part::class;
+    protected $partClass = '';
 
     /**
      * @var array
@@ -139,6 +139,9 @@ trait PartTrait
         return $this->mailparse->getText();
     }
 
+    /**
+     * @return array
+     */
     protected function getData()
     {
         if (empty($this->data) && $this->mailparse instanceof Mailparse) {
