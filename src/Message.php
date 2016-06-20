@@ -2,9 +2,6 @@
 
 namespace OOPHP\Email;
 
-use OOPHP\Email\Message\Part;
-
-class Message extends Part implements MessageInterface
+class Message extends AbstractMessage
 {
-    use MessageTrait;
 }

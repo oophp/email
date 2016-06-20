@@ -18,7 +18,7 @@ trait PartTrait
     /**
      * @var string $partClass
      */
-    protected $partClass = '';
+    protected $partClass = Part::class;
 
     /**
      * @var array
