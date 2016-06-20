@@ -53,7 +53,7 @@ class MessageFactory implements MessageFactoryInterface
      */
     public function fromStream($stream, string $mailparseClass = Mailparse::class): MessageInterface
     {
-        $mailparse = (new $mailparseClass())->setStream($stream);
+        $mailparse = (new $mailparseClass())->setStream($stream, true);
 
         return $this->createMessage($mailparse);
     }
