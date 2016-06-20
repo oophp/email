@@ -108,7 +108,15 @@ class HeaderField implements HeaderFieldInterface
      */
     public function __toString()
     {
-        $str = implode("\r\n", array_map('strval', $this->headerLines));
+        $headerLines = $this->headerLines;
+        array_walk(
+            $headerLines,
+            function (&$value, $key, $name) {
+                $value = ucfirst($name).': '.$value;
+            },
+            $this->name
+        );
+        $str = implode("\r\n", $headerLines);
 
         return $str;
     }
