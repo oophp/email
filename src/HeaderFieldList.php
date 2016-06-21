@@ -2,12 +2,25 @@
 
 namespace OOPHP\Email;
 
+use OOPHP\Email\Message\Header\Address;
+use OOPHP\Email\Message\Header\Date;
+
 class HeaderFieldList implements HeaderFieldListInterface
 {
     /**
      * @var HeaderFieldInterface[]
      */
     protected $headerFields;
+
+    protected $headerClassMap = [
+        'from'        => Address::class,
+        'to'          => Address::class,
+        'reply-to'    => Address::class,
+        'cc'          => Address::class,
+        'bcc'         => Address::class,
+        'return-path' => Address::class,
+        'date'        => Date::class,
+    ];
 
     /**
      * HeaderFieldList constructor.
@@ -28,7 +41,11 @@ class HeaderFieldList implements HeaderFieldListInterface
     public function getField(string $name, $default = null)
     {
         if (empty($this->headerFields[$name])) {
-            return new HeaderField($name, $default);
+            if (is_object($default)) {
+                return $default;
+            }
+
+            return $this->createField($name, $default);
         }
 
         return $this->headerFields[$name];
@@ -39,7 +56,7 @@ class HeaderFieldList implements HeaderFieldListInterface
      */
     public function setField(string $name, $value)
     {
-        $this->headerFields[$name] = new HeaderField($name, $value);
+        $this->headerFields[$name] = $this->createField($name, $value);
 
         return $this;
     }
@@ -76,5 +93,18 @@ class HeaderFieldList implements HeaderFieldListInterface
         $str = implode("\r\n", array_map('strval', $this->headerFields));
 
         return $str;
+    }
+
+    /**
+     * @param string          $name
+     * @param string|string[] $value
+     *
+     * @return HeaderFieldInterface
+     */
+    protected function createField(string $name, $value): HeaderFieldInterface
+    {
+        $className = $this->headerClassMap[$name] ?? HeaderField::class;
+
+        return new $className($name, $value);
     }
 }

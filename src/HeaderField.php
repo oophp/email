@@ -2,6 +2,8 @@
 
 namespace OOPHP\Email;
 
+use OOPHP\Email\Exception\EmptyHeaderValueException;
+
 class HeaderField implements HeaderFieldInterface
 {
     /**
@@ -63,7 +65,7 @@ class HeaderField implements HeaderFieldInterface
     public function addValue($value)
     {
         if (empty($value)) {
-            throw new \Exception('Header value can\'t be empty.');
+            throw new EmptyHeaderValueException();
         }
 
         $this->headerLines[] = (string)$value;
