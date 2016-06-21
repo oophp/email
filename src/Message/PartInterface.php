@@ -45,6 +45,18 @@ interface PartInterface
     public function getPart(string $partId);
 
     /**
+     * @return PartInterface[]
+     */
+    public function getBodies();
+
+    /**
+     * @param string $format
+     *
+     * @return PartInterface
+     */
+    public function getBody(string $format = null);
+
+    /**
      * @return string
      */
     public function __toString();

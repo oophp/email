@@ -131,6 +131,22 @@ trait PartTrait
         return $this->parts[$partId] ?? false;
     }
 
+    public function getBodies()
+    {
+        $bodies = [];
+        foreach ($this->getParts() as $part) {
+            /** @var PartInterface $part */
+            $bodies[] = $part->getBody();
+        }
+
+        return $bodies;
+    }
+
+    public function getBody()
+    {
+        return $this->mailparse->getBody();
+    }
+
     /**
      * {@inheritdoc}
      */
