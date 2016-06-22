@@ -50,11 +50,9 @@ interface PartInterface
     public function getBodies();
 
     /**
-     * @param string $format
-     *
      * @return PartInterface
      */
-    public function getBody(string $format = null);
+    public function getBody();
 
     /**
      * @return string
