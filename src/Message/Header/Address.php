@@ -14,7 +14,7 @@ class Address extends HeaderField
             throw new EmptyHeaderValueException();
         }
 
-        $this->headerLines[] = Utils::parseRFC822Addresses((string)$value);
+        $this->headerLines = array_merge($this->headerLines, Utils::parseRFC822Addresses((string)$value));
 
         return $this;
     }
