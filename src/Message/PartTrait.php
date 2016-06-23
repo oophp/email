@@ -155,6 +155,14 @@ trait PartTrait
         return $this->mailparse->getText();
     }
 
+    public function jsonSerialize()
+    {
+        return [
+            'headers' => $this->getHeaders(),
+            'parts'   => $this->getParts(),
+        ];
+    }
+
     /**
      * @return array
      */

@@ -4,7 +4,7 @@ namespace OOPHP\Email\Message;
 
 use OOPHP\Email\HeaderFieldInterface;
 
-interface PartInterface
+interface PartInterface extends \JsonSerializable
 {
     /**
      * @return array
